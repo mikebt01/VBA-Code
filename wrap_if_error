@@ -1,0 +1,33 @@
+Sub WrapIfError()
+ 
+'PURPOSE: Add an IFERROR() Function around all the selected cells' formulas
+'SOURCE: www.TheSpreadsheetGuru.com
+ 
+Dim rng As Range
+Dim cell As Range
+Dim x As String
+ 
+'Determine if a single cell or range is selected
+  If Selection.Cells.Count = 1 Then
+    Set rng = Selection
+    If Not rng.HasFormula Then GoTo NoFormulas
+  Else
+    'Get Range of Cells that Only Contain Formulas
+      On Error GoTo NoFormulas
+        Set rng = Selection.SpecialCells(xlCellTypeFormulas)
+      On Error GoTo 0
+  End If
+ 
+'Loop Through Each Cell in Range and add =IFERROR([formula],"")
+  For Each cell In rng.Cells
+    x = cell.Formula
+    cell = "=IFERROR(" & Right(x, Len(x) - 1) & ",0)"
+  Next cell
+ 
+Exit Sub
+ 
+'Error Handler
+NoFormulas:
+  MsgBox "There were no formulas found in your selection!"
+ 
+End Sub
