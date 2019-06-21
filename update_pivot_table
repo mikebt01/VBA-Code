@@ -1,0 +1,44 @@
+' This example was used to update a pivot table to only show the latest 5 weeks
+
+Sub update_pivots()
+ 
+' only works for latest weeks, (cant use it to update for previous weeks)
+' need to change the filters for the weeks and refresh all
+ 
+Application.ScreenUpdating = False
+ 
+Dim wb As Workbook: Set wb = ThisWorkbook
+Dim missing_time_ws As Worksheet: Set missing_time_ws = wb.Worksheets("YTD Missing Hours")
+Dim bench_ws As Worksheet: Set bench_ws = wb.Worksheets("AFW and HFW by Capability")
+Dim week_num As Long
+ 
+ThisWorkbook.RefreshAll
+  
+current_week = 201923
+past_weeks = 5
+ 
+missing_time_ws.PivotTables("Missing Hours by Week Pivot").PivotFields("Week").ClearAllFilters
+ 
+'These cause overlap but this is a good idea when there is only one pivot on a sheet
+ 
+'bench_ws.PivotTables("AFW by Week").PivotFields("Week").ClearAllFilters
+'bench_ws.PivotTables("PNSU by Week").PivotFields("Week").ClearAllFilters
+ 
+For i = 201901 To current_week - past_weeks
+ 
+    week_num = i
+    week_str = CStr(i)
+     
+    On Error Resume Next 'In case the week doesnt have any missing time
+    missing_time_ws.PivotTables("Missing Hours by Week Pivot").PivotFields("Week").PivotItems(week_str).Visible = False
+    bench_ws.PivotTables("AFW by Week").PivotFields("Week").PivotItems(week_str).Visible = False
+    bench_ws.PivotTables("PNSU by Week").PivotFields("Week").PivotItems(week_str).Visible = False
+ 
+Next i
+ 
+ 
+missing_time_ws.PivotTables("Missing Hours by Week Pivot").PivotFields("Week").PivotItems("(blank)").Visible = False
+ 
+Application.ScreenUpdating = True
+ 
+End Sub
