@@ -1,0 +1,17 @@
+Function getLen(ws)
+' This gets the last used row of a worksheet
+ 
+getLen = ws.Cells.Find(What:="*", After:=ws.Cells(1, 1), LookIn:=xlFormulas, LookAt:= _
+xlPart, SearchOrder:=xlByRows, SearchDirection:=xlPrevious, MatchCase:=False).Row
+ 
+End Function
+
+
+
+Function getWidth(ws)
+' This gets the last used column of a worksheet
+ 
+getWidth = ws.Cells.Find(What:="*", After:=ws.Cells(1, 1), LookIn:=xlFormulas, LookAt:= _
+xlPart, SearchOrder:=xlByColumns, SearchDirection:=xlPrevious, MatchCase:=False).Column
+ 
+End Function
