@@ -1,0 +1,9 @@
+Sub WaitForCalculation()
+    Application.StatusBar = "Waiting for full recalculation..."
+    Application.CalculateFull
+     
+    Do Until Application.CalculationState = xlDone
+        DoEvents
+    Loop
+    Application.StatusBar = ""
+End Sub
