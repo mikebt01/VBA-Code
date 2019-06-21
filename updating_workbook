@@ -1,0 +1,59 @@
+' Aim of this sub is to update the data sources in a workbook from a range of worksheets in another file location
+
+Sub update_all_data()
+
+' this subroutine should go into the specified Teamshare location open up the relevant data file, and then copy and paste into
+' the correct location in this workbook.
+
+Application.ScreenUpdating = False
+
+Dim main_wb As Workbook: Set main_wb = ThisWorkbook 'I hold the macro in the main file
+Dim current_report As Workbook
+Dim report_page, current_tab As Worksheet
+Dim report_page_len, report_page_width, i As Long
+Dim tab_array, report_array As Variant
+
+' The tabs where the data is pasted
+tab_array = Array( )
+
+' The reports in the the shared location
+report_array = Array( )
+    
+
+For i = LBound(tab_array) To UBound(tab_array)
+    
+    Application.StatusBar = "Opening Report: " & report_array(i)
+    
+    'Open each report from the teamshare folder
+    Workbooks.Open Filename:="https://connect/teamshare" + report_array(i)
+    
+    Set current_report = Workbooks(report_array(i))
+    Set report_page = current_report.Worksheets("Page1") ' Page1 in all reports for now
+    
+    Set current_tab = main_wb.Worksheets(tab_array(i))
+    
+    ' this gets numeric values for the length and width of the new data set
+    report_page_len = getLen(report_page)
+    report_page_width = getWidth(report_page)
+    
+    Application.StatusBar = "Clearing Data: " & tab_array(i)
+    ' clear the old data in its entirety
+    current_tab.Cells.Clear
+    
+    
+    Application.StatusBar = "Importing Data: " & tab_array(i)
+    current_tab.Range(current_tab.Cells(1, 1), current_tab.Cells(report_page_len, report_page_width)) = _
+    report_page.Range(report_page.Cells(1, 1), report_page.Cells(report_page_len, report_page_width)).Value
+    
+    current_report.Close
+
+Next i
+
+Application.StatusBar = "Recalculating Workbook"
+Application.CalculateFull
+
+
+Application.StatusBar = False
+
+Application.ScreenUpdating = True
+End Sub
