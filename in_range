@@ -1,0 +1,11 @@
+Function InRange(Range1 As Range, Range2 As Range) As Boolean
+' returns True if Range1 is within Range2
+Dim InterSectRange As Range
+
+Set InterSectRange = Application.Intersect(Range1, Range2)
+
+InRange = Not InterSectRange Is Nothing
+
+Set InterSectRange = Nothing
+
+End Function
