@@ -1,0 +1,15 @@
+' The purpose of this is to get a column of data and to create a unique list of the data in that column in a specifed location
+
+Sub unique_list_of_cost_centres()
+
+Dim b As Worksheet: Set b = Worksheets("Resources")
+Dim c As Worksheet: Set c = Worksheets("Lists")
+
+Dim bLen As Long: bLen = getLen(b)
+
+c.Range("A2:A" & bLen) = b.Range("D2:D" & bLen).Value
+c.Range("A2:A" & bLen).RemoveDuplicates Columns:=1, Header:=xlNo
+
+
+
+End Sub
