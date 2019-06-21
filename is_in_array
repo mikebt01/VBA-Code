@@ -1,0 +1,5 @@
+' CHeck to see if a string is in an array, returns True if it is
+
+Function IsInArray(stringToBeFound As String, arr As Variant) As Boolean
+  IsInArray = (UBound(Filter(arr, stringToBeFound)) > -1)
+End Function
